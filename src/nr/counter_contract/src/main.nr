@@ -66,6 +66,7 @@ pub contract Counter {
     #[contract_library_method]
     fn log_sequential<let N: u32>(context: &mut PrivateContext, remaining_chunks: u8) -> Field {
         // Safety: this is indeed arbitrary
+        /*
         let chunk: [Field; N] = unsafe { input::<N>() };
         let hash: Field = poseidon::poseidon2::Poseidon2::hash(chunk, N);
         if remaining_chunks == 0 {
@@ -79,11 +80,45 @@ pub contract Counter {
                 2
             )
         }
+        */
+        let mut chunk: [Field; N] = unsafe { input::<N>() };
+        let mut hash: Field = poseidon::poseidon2::Poseidon2::hash(chunk, N);
+        for _ in 0..remaining_chunks {
+            chunk = unsafe { input::<N>() };
+            hash = poseidon::poseidon2::Poseidon2::hash(
+                [
+                    poseidon::poseidon2::Poseidon2::hash(chunk, N),
+                    hash
+                ],
+                2
+            );
+        }
+        hash
+    }
+
+    #[external("private")]
+    fn log_sequential_16(remaining_chunks: u8) -> Field {
+        log_sequential::<16>(&mut context, remaining_chunks)
+    }
+
+    #[external("private")]
+    fn log_sequential_32(remaining_chunks: u8) -> Field {
+        log_sequential::<32>(&mut context, remaining_chunks)
+    }
+
+    #[external("private")]
+    fn log_sequential_64(remaining_chunks: u8) -> Field {
+        log_sequential::<64>(&mut context, remaining_chunks)
     }
 
     #[external("private")]
     fn log_sequential_128(remaining_chunks: u8) -> Field {
         log_sequential::<128>(&mut context, remaining_chunks)
+    }
+
+    #[external("private")]
+    fn log_sequential_256(remaining_chunks: u8) -> Field {
+        log_sequential::<256>(&mut context, remaining_chunks)
     }
 
     /////////////////////////////////////////////////
