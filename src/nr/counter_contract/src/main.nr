@@ -97,7 +97,7 @@ pub contract Counter {
             0
         } else {
             // Safety: this is indeed arbitrary
-            let chunk: [Field; 32] = unsafe { input::<32>() };
+            let chunk: [Field; 32] = unsafe { input_extra_work::<32>() };
             Counter::at(context.this_address()).log_32(chunk).enqueue(&mut context);
             let hash: Field = poseidon::poseidon2::Poseidon2::hash(chunk, 32);
             if chunks == 1 {
@@ -105,7 +105,7 @@ pub contract Counter {
             } else {
                 poseidon::poseidon2::Poseidon2::hash(
                     [
-                        Counter::at(context.this_address()).log_sequential_32(chunks - 1).call(&mut context),
+                        Counter::at(context.this_address()).log_sequential_extra_work_32(chunks - 1).call(&mut context),
                         hash
                     ],
                     2
