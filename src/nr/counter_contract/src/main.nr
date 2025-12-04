@@ -91,7 +91,7 @@ pub contract Counter {
         } else {
             poseidon::poseidon2::Poseidon2::hash(
                 [
-                    Counter::at(context.this_address()).log_sequential_extra_32(remaining_chunks - 1).call(&mut context),
+                    Counter::at(context.this_address()).log_sequential_extra_work_32(remaining_chunks - 1).call(&mut context),
                     hash
                 ],
                 2
