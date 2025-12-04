@@ -60,15 +60,15 @@ export default class CounterContractBenchmark extends Benchmark {
       },
       {
         caller: deployer,
-        action: counterContract.withWallet(wallet).methods.log_sequential_128(0),
+        action: counterContract.withWallet(wallet).methods.log_sequential_32(0),
       },
       {
         caller: deployer,
-        action: counterContract.withWallet(wallet).methods.log_sequential_128(1),
+        action: counterContract.withWallet(wallet).methods.log_sequential_32(1),
       },
       {
         caller: deployer,
-        action: counterContract.withWallet(wallet).methods.log_sequential_128(2),
+        action: counterContract.withWallet(wallet).methods.log_sequential_32(2),
       },
     ];
 

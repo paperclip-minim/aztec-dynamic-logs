@@ -5,7 +5,6 @@ use aztec::macros::aztec;
 pub contract Counter {
     // aztec library imports
     use aztec::{
-        context::PrivateContext,
         macros::{functions::{external, initializer}, storage::storage},
         protocol_types::address::AztecAddress,
         state_vars::PublicImmutable,
@@ -63,10 +62,10 @@ pub contract Counter {
     }
     */
 
-    #[contract_library_method]
+    /*
+    #[external("private")]
     fn log_sequential<let N: u32>(context: &mut PrivateContext, remaining_chunks: u8) -> Field {
         // Safety: this is indeed arbitrary
-        /*
         let chunk: [Field; N] = unsafe { input::<N>() };
         let hash: Field = poseidon::poseidon2::Poseidon2::hash(chunk, N);
         if remaining_chunks == 0 {
@@ -74,26 +73,12 @@ pub contract Counter {
         } else {
             poseidon::poseidon2::Poseidon2::hash(
                 [
-                    log_sequential::<N>(context, remaining_chunks - 1),
+                    Counter::at(context.this_address()).log_sequential::<N>(context, remaining_chunks - 1),
                     hash
                 ],
                 2
             )
         }
-        */
-        let mut chunk: [Field; N] = unsafe { input::<N>() };
-        let mut hash: Field = poseidon::poseidon2::Poseidon2::hash(chunk, N);
-        for _ in 0..remaining_chunks {
-            chunk = unsafe { input::<N>() };
-            hash = poseidon::poseidon2::Poseidon2::hash(
-                [
-                    poseidon::poseidon2::Poseidon2::hash(chunk, N),
-                    hash
-                ],
-                2
-            );
-        }
-        hash
     }
 
     #[external("private")]
@@ -119,6 +104,45 @@ pub contract Counter {
     #[external("private")]
     fn log_sequential_256(remaining_chunks: u8) -> Field {
         log_sequential::<256>(&mut context, remaining_chunks)
+    }
+    */
+
+    /*
+    #[external("private")]
+    fn log_sequential_N(remaining_chunks: u8) -> Field {
+        // Safety: this is indeed arbitrary
+        let chunk: [Field; N] = unsafe { input::<N>() };
+        let hash: Field = poseidon::poseidon2::Poseidon2::hash(chunk, N);
+        if remaining_chunks == 0 {
+            hash
+        } else {
+            poseidon::poseidon2::Poseidon2::hash(
+                [
+                    Counter::at(context.this_address()).log_sequential_N(context, remaining_chunks - 1),
+                    hash
+                ],
+                2
+            )
+        }
+    }
+    */
+
+    #[external("private")]
+    fn log_sequential_32(remaining_chunks: u8) -> Field {
+        // Safety: this is indeed arbitrary
+        let chunk: [Field; 32] = unsafe { input::<32>() };
+        let hash: Field = poseidon::poseidon2::Poseidon2::hash(chunk, 32);
+        if remaining_chunks == 0 {
+            hash
+        } else {
+            poseidon::poseidon2::Poseidon2::hash(
+                [
+                    Counter::at(context.this_address()).log_sequential_32(remaining_chunks - 1).call(&mut context),
+                    hash
+                ],
+                2
+            )
+        }
     }
 
     /////////////////////////////////////////////////
