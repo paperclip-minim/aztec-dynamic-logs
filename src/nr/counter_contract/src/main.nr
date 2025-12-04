@@ -33,6 +33,7 @@ pub contract Counter {
         storage.owner.read()
     }
 
+    /*
     #[contract_library_method]
     #[oracle(input)]
     unconstrained fn input_oracle<let N: u32>() -> [Field; N] { }
@@ -40,6 +41,16 @@ pub contract Counter {
     #[contract_library_method]
     unconstrained fn input<let N: u32>() -> [Field; N] {
         input_oracle()
+    }
+    */
+
+    #[contract_library_method]
+    unconstrained fn input<let N: u32>() -> [Field; N] {
+        let mut result: [Field; N] = [0; N];
+        for i in 0..N {
+            result[i] = aztec::oracle::random::random();
+        }
+        result
     }
 
     /*
