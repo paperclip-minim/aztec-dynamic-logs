@@ -56,27 +56,11 @@ export default class CounterContractBenchmark extends Benchmark {
     const methods: ContractFunctionInteractionCallIntent[] = [
       {
         caller: deployer,
-        action: counterContract.withWallet(wallet).methods.log_sequential_32(0),
+        action: counterContract.withWallet(wallet).methods.log_sequential_32_8(),
       },
       {
         caller: deployer,
-        action: counterContract.withWallet(wallet).methods.log_sequential_32(1),
-      },
-      {
-        caller: deployer,
-        action: counterContract.withWallet(wallet).methods.log_sequential_32(3),
-      },
-      {
-        caller: deployer,
-        action: counterContract.withWallet(wallet).methods.log_sequential_32(7),
-      },
-      {
-        caller: deployer,
-        action: counterContract.withWallet(wallet).methods.log_sequential_32(15),
-      },
-      {
-        caller: deployer,
-        action: counterContract.withWallet(wallet).methods.log_sequential_extra_work_32(15),
+        action: counterContract.withWallet(wallet).methods.log_sequential_extra_work_32_8(),
       },
     ];
 
