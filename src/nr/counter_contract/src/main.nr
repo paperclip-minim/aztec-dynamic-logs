@@ -1,13 +1,14 @@
 use aztec::macros::aztec;
-pub mod test;
+// pub mod test;
 
 #[aztec]
 pub contract Counter {
     // aztec library imports
     use aztec::{
-        macros::{functions::{external, initializer, internal, view}, storage::storage},
+        context::PrivateContext,
+        macros::{functions::{external, initializer}, storage::storage},
         protocol_types::address::AztecAddress,
-        state_vars::{PublicImmutable, PublicMutable},
+        state_vars::PublicImmutable,
     };
 
     // @param owner The address of the owner
@@ -15,7 +16,6 @@ pub contract Counter {
     #[storage]
     struct Storage<Context> {
         owner: PublicImmutable<AztecAddress, Context>,
-        counter: PublicMutable<u128, Context>,
     }
 
     /// @dev Initialize the contract
@@ -33,6 +33,51 @@ pub contract Counter {
         storage.owner.read()
     }
 
+    #[contract_library_method]
+    #[oracle(input)]
+    unconstrained fn input_oracle<let N: u32>() -> [Field; N] { }
+
+    #[contract_library_method]
+    unconstrained fn input<let N: u32>() -> [Field; N] {
+        input_oracle()
+    }
+
+    /*
+        let mut result: [Field; N] = [0; N];
+        for i in 0..N {
+            // Safety: we don't care what this is
+            result[i] = aztec::oracle::random::random();
+        }
+        result
+    }
+    */
+
+    #[contract_library_method]
+    fn log_sequential<let N: u32>(context: &mut PrivateContext, remaining_chunks: u8) -> Field {
+        // Safety: this is indeed arbitrary
+        let chunk: [Field; N] = unsafe { input::<N>() };
+        let hash: Field = poseidon::poseidon2::Poseidon2::hash(chunk, N);
+        if remaining_chunks == 0 {
+            hash
+        } else {
+            poseidon::poseidon2::Poseidon2::hash(
+                [
+                    log_sequential::<N>(context, remaining_chunks - 1),
+                    hash
+                ],
+                2
+            )
+        }
+    }
+
+    #[external("private")]
+    fn log_sequential_128(remaining_chunks: u8) -> Field {
+        log_sequential::<128>(&mut context, remaining_chunks)
+    }
+
+    /////////////////////////////////////////////////
+
+    /*
     /// @dev Increments the counter
     #[external("private")]
     fn increment() {
@@ -54,4 +99,5 @@ pub contract Counter {
         let current_value = storage.counter.read();
         storage.counter.write(current_value + 1);
     }
+    */
 }
