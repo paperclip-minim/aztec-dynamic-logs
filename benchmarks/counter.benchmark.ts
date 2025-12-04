@@ -56,11 +56,51 @@ export default class CounterContractBenchmark extends Benchmark {
     const methods: ContractFunctionInteractionCallIntent[] = [
       {
         caller: deployer,
-        action: counterContract.withWallet(wallet).methods.log_sequential_32_8(),
+        action: counterContract.withWallet(wallet).methods.log_sequential_16_2()
       },
       {
         caller: deployer,
-        action: counterContract.withWallet(wallet).methods.log_sequential_extra_work_32_8(),
+        action: counterContract.withWallet(wallet).methods.log_sequential_16_4()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_sequential_16_8()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_sequential_16_16()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_sequential_32_1()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_sequential_32_2()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_sequential_32_4()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_sequential_32_8()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_sequential_64_1()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_sequential_64_2()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_sequential_64_4()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_sequential_extra_work_32_8()
       },
     ];
 

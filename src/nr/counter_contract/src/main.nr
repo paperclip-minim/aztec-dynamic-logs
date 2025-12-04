@@ -32,17 +32,6 @@ pub contract Counter {
         storage.owner.read()
     }
 
-    /*
-    #[contract_library_method]
-    #[oracle(input)]
-    unconstrained fn input_oracle<let N: u32>() -> [Field; N] { }
-
-    #[contract_library_method]
-    unconstrained fn input<let N: u32>() -> [Field; N] {
-        input_oracle()
-    }
-    */
-
     #[contract_library_method]
     unconstrained fn input<let N: u32>() -> [Field; N] {
         let mut result: [Field; N] = [0; N];
@@ -64,8 +53,43 @@ pub contract Counter {
 
     #[external("public")]
     #[internal]
+    fn log_16(message: [Field; 16]) {
+        context.emit_public_log(message)
+    }
+
+    #[external("public")]
+    #[internal]
     fn log_32(message: [Field; 32]) {
         context.emit_public_log(message)
+    }
+
+    #[external("public")]
+    #[internal]
+    fn log_64(message: [Field; 64]) {
+        context.emit_public_log(message)
+    }
+
+    #[external("private")]
+    fn log_sequential_16(chunks: u8) -> Field {
+        if chunks == 0 {
+            0
+        } else {
+            // Safety: this is indeed arbitrary
+            let chunk: [Field; 16] = unsafe { input::<16>() };
+            Counter::at(context.this_address()).log_16(chunk).enqueue(&mut context);
+            let hash: Field = poseidon::poseidon2::Poseidon2::hash(chunk, 16);
+            if chunks == 1 {
+                hash
+            } else {
+                poseidon::poseidon2::Poseidon2::hash(
+                    [
+                        Counter::at(context.this_address()).log_sequential_16(chunks - 1).call(&mut context),
+                        hash
+                    ],
+                    2
+                )
+            }
+        }
     }
 
     #[external("private")]
@@ -83,6 +107,29 @@ pub contract Counter {
                 poseidon::poseidon2::Poseidon2::hash(
                     [
                         Counter::at(context.this_address()).log_sequential_32(chunks - 1).call(&mut context),
+                        hash
+                    ],
+                    2
+                )
+            }
+        }
+    }
+
+    #[external("private")]
+    fn log_sequential_64(chunks: u8) -> Field {
+        if chunks == 0 {
+            0
+        } else {
+            // Safety: this is indeed arbitrary
+            let chunk: [Field; 64] = unsafe { input::<64>() };
+            Counter::at(context.this_address()).log_64(chunk).enqueue(&mut context);
+            let hash: Field = poseidon::poseidon2::Poseidon2::hash(chunk, 64);
+            if chunks == 1 {
+                hash
+            } else {
+                poseidon::poseidon2::Poseidon2::hash(
+                    [
+                        Counter::at(context.this_address()).log_sequential_64(chunks - 1).call(&mut context),
                         hash
                     ],
                     2
@@ -115,12 +162,81 @@ pub contract Counter {
     }
 
     #[external("private")]
+    fn log_sequential_16_2() {
+        let _ = Counter::at(context.this_address()).log_sequential_16(2).call(&mut context);
+    }
+
+    #[external("private")]
+    fn log_sequential_16_4() {
+        let _ = Counter::at(context.this_address()).log_sequential_16(4).call(&mut context);
+    }
+
+    #[external("private")]
+    fn log_sequential_16_8() {
+        let _ = Counter::at(context.this_address()).log_sequential_16(8).call(&mut context);
+    }
+
+    #[external("private")]
+    fn log_sequential_16_16() {
+        let _ = Counter::at(context.this_address()).log_sequential_16(8).call(&mut context);
+    }
+
+    #[external("private")]
+    fn log_sequential_32_1() {
+        let _ = Counter::at(context.this_address()).log_sequential_32(1).call(&mut context);
+    }
+
+    #[external("private")]
+    fn log_sequential_32_2() {
+        let _ = Counter::at(context.this_address()).log_sequential_32(2).call(&mut context);
+    }
+
+    #[external("private")]
+    fn log_sequential_32_4() {
+        let _ = Counter::at(context.this_address()).log_sequential_32(4).call(&mut context);
+    }
+
+    #[external("private")]
     fn log_sequential_32_8() {
         let _ = Counter::at(context.this_address()).log_sequential_32(8).call(&mut context);
+    }
+
+    #[external("private")]
+    fn log_sequential_64_1() {
+        let _ = Counter::at(context.this_address()).log_sequential_64(1).call(&mut context);
+    }
+
+    #[external("private")]
+    fn log_sequential_64_2() {
+        let _ = Counter::at(context.this_address()).log_sequential_64(2).call(&mut context);
+    }
+
+    #[external("private")]
+    fn log_sequential_64_4() {
+        let _ = Counter::at(context.this_address()).log_sequential_64(4).call(&mut context);
     }
 
     #[external("private")]
     fn log_sequential_extra_work_32_8() {
         let _ = Counter::at(context.this_address()).log_sequential_extra_work_32(8).call(&mut context);
     }
+
+    /*
+    #[external("private")]
+    #[internal]
+    fn log_binary_inner(level: 
+
+    #[external("private")]
+    fn log_binary(chunks: u8) -> Field {
+        if chunks == 0 {
+            0
+        } else if chunks == 1 {
+            // Safety: this is indeed arbitrary
+            let chunk: [Field; 32] = unsafe { input::<32>() };
+            Counter::at(context.this_address()).log_32(chunk).enqueue(&mut context);
+            poseidon::poseidon2::Poseidon2::hash(chunk, 32)
+        } else if chunks {
+        }
+    }
+    */
 }
