@@ -220,30 +220,6 @@ pub contract Counter {
     fn log_sequential_extra_work_32_8() {
         let _ = Counter::at(context.this_address()).log_sequential_extra_work_32(8).call(&mut context);
     }
-    /*
-    #[external("private")]
-    fn log_sequential_16(chunks: u8) -> Field {
-        if chunks == 0 {
-            0
-        } else {
-            // Safety: this is indeed arbitrary
-            let chunk: [Field; 16] = unsafe { input::<16>() };
-            Counter::at(context.this_address()).log_16(chunk).enqueue(&mut context);
-            let hash: Field = poseidon::poseidon2::Poseidon2::hash(chunk, 16);
-            if chunks == 1 {
-                hash
-            } else {
-                poseidon::poseidon2::Poseidon2::hash(
-                    [
-                        Counter::at(context.this_address()).log_sequential_16(chunks - 1).call(&mut context),
-                        hash
-                    ],
-                    2
-                )
-            }
-        }
-    }
-    */
 
     #[external("private")]
     #[internal]
@@ -307,7 +283,7 @@ pub contract Counter {
         let mut hashes: [Field; 8] = [0; 8];
         let mut chunks = chunks;
         for i in 0..8 as u32 {
-            if chunks % 2 == 0 {
+            if chunks % 2 == 1 {
                 hashes[i] = Counter::at(context.this_address()).log_balanced_binary_16(i as u8).call(&mut context)
             }
             chunks /= 2;
@@ -320,7 +296,7 @@ pub contract Counter {
         let mut hashes: [Field; 8] = [0; 8];
         let mut chunks = chunks;
         for i in 0..8 as u32 {
-            if chunks % 2 == 0 {
+            if chunks % 2 == 1 {
                 hashes[i] = Counter::at(context.this_address()).log_balanced_binary_32(i as u8).call(&mut context)
             }
             chunks /= 2;
@@ -333,7 +309,7 @@ pub contract Counter {
         let mut hashes: [Field; 8] = [0; 8];
         let mut chunks = chunks;
         for i in 0..8 as u32 {
-            if chunks % 2 == 0 {
+            if chunks % 2 == 1 {
                 hashes[i] = Counter::at(context.this_address()).log_balanced_binary_64(i as u8).call(&mut context)
             }
             chunks /= 2;
