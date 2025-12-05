@@ -102,6 +102,106 @@ export default class CounterContractBenchmark extends Benchmark {
         caller: deployer,
         action: counterContract.withWallet(wallet).methods.log_sequential_extra_work_32_8()
       },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_16_2()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_16_4()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_16_8()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_16_16()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_32_1()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_32_2()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_32_4()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_32_5()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_32_6()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_32_7()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_32_8()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_64_1()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_64_2()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_binary_64_4()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_static_16_2()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_static_16_4()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_static_16_8()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_static_16_16()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_static_32_1()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_static_32_2()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_static_32_4()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_static_32_8()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_static_64_1()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_static_64_2()
+      },
+      {
+        caller: deployer,
+        action: counterContract.withWallet(wallet).methods.log_static_64_4()
+      },
     ];
 
     return methods;
