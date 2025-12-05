@@ -178,7 +178,7 @@ pub contract Counter {
 
     #[external("private")]
     fn log_sequential_16_16() {
-        let _ = Counter::at(context.this_address()).log_sequential_16(8).call(&mut context);
+        let _ = Counter::at(context.this_address()).log_sequential_16(16).call(&mut context);
     }
 
     #[external("private")]
