@@ -83,10 +83,12 @@ pub contract Counter {
             } else {
                 poseidon::poseidon2::Poseidon2::hash(
                     [
-                        Counter::at(context.this_address()).log_sequential_16(chunks - 1).call(&mut context),
-                        hash
+                        Counter::at(context.this_address()).log_sequential_16(chunks - 1).call(
+                            &mut context,
+                        ),
+                        hash,
                     ],
-                    2
+                    2,
                 )
             }
         }
@@ -106,10 +108,12 @@ pub contract Counter {
             } else {
                 poseidon::poseidon2::Poseidon2::hash(
                     [
-                        Counter::at(context.this_address()).log_sequential_32(chunks - 1).call(&mut context),
-                        hash
+                        Counter::at(context.this_address()).log_sequential_32(chunks - 1).call(
+                            &mut context,
+                        ),
+                        hash,
                     ],
-                    2
+                    2,
                 )
             }
         }
@@ -129,10 +133,12 @@ pub contract Counter {
             } else {
                 poseidon::poseidon2::Poseidon2::hash(
                     [
-                        Counter::at(context.this_address()).log_sequential_64(chunks - 1).call(&mut context),
-                        hash
+                        Counter::at(context.this_address()).log_sequential_64(chunks - 1).call(
+                            &mut context,
+                        ),
+                        hash,
                     ],
-                    2
+                    2,
                 )
             }
         }
@@ -152,10 +158,12 @@ pub contract Counter {
             } else {
                 poseidon::poseidon2::Poseidon2::hash(
                     [
-                        Counter::at(context.this_address()).log_sequential_extra_work_32(chunks - 1).call(&mut context),
-                        hash
+                        Counter::at(context.this_address())
+                            .log_sequential_extra_work_32(chunks - 1)
+                            .call(&mut context),
+                        hash,
                     ],
-                    2
+                    2,
                 )
             }
         }
@@ -218,7 +226,8 @@ pub contract Counter {
 
     #[external("private")]
     fn log_sequential_extra_work_32_8() {
-        let _ = Counter::at(context.this_address()).log_sequential_extra_work_32(8).call(&mut context);
+        let _ =
+            Counter::at(context.this_address()).log_sequential_extra_work_32(8).call(&mut context);
     }
 
     #[external("private")]
@@ -232,10 +241,14 @@ pub contract Counter {
         } else {
             poseidon::poseidon2::Poseidon2::hash(
                 [
-                    Counter::at(context.this_address()).log_balanced_binary_16(level - 1).call(&mut context),
-                    Counter::at(context.this_address()).log_balanced_binary_16(level - 1).call(&mut context),
+                    Counter::at(context.this_address()).log_balanced_binary_16(level - 1).call(
+                        &mut context,
+                    ),
+                    Counter::at(context.this_address()).log_balanced_binary_16(level - 1).call(
+                        &mut context,
+                    ),
                 ],
-                2
+                2,
             )
         }
     }
@@ -251,10 +264,14 @@ pub contract Counter {
         } else {
             poseidon::poseidon2::Poseidon2::hash(
                 [
-                    Counter::at(context.this_address()).log_balanced_binary_32(level - 1).call(&mut context),
-                    Counter::at(context.this_address()).log_balanced_binary_32(level - 1).call(&mut context),
+                    Counter::at(context.this_address()).log_balanced_binary_32(level - 1).call(
+                        &mut context,
+                    ),
+                    Counter::at(context.this_address()).log_balanced_binary_32(level - 1).call(
+                        &mut context,
+                    ),
                 ],
-                2
+                2,
             )
         }
     }
@@ -270,21 +287,27 @@ pub contract Counter {
         } else {
             poseidon::poseidon2::Poseidon2::hash(
                 [
-                    Counter::at(context.this_address()).log_balanced_binary_64(level - 1).call(&mut context),
-                    Counter::at(context.this_address()).log_balanced_binary_64(level - 1).call(&mut context),
+                    Counter::at(context.this_address()).log_balanced_binary_64(level - 1).call(
+                        &mut context,
+                    ),
+                    Counter::at(context.this_address()).log_balanced_binary_64(level - 1).call(
+                        &mut context,
+                    ),
                 ],
-                2
+                2,
             )
         }
     }
 
     #[external("private")]
     fn log_binary_16(chunks: u8) -> Field {
-        let mut hashes: [Field; 8] = [0; 8];
+        let mut hashes: [Field; 5] = [0; 5];
         let mut chunks = chunks;
-        for i in 0..8 as u32 {
+        for i in 0..5 as u32 {
             if chunks % 2 == 1 {
-                hashes[i] = Counter::at(context.this_address()).log_balanced_binary_16(i as u8).call(&mut context)
+                hashes[i] = Counter::at(context.this_address())
+                    .log_balanced_binary_16(i as u8)
+                    .call(&mut context)
             }
             chunks /= 2;
         }
@@ -293,11 +316,13 @@ pub contract Counter {
 
     #[external("private")]
     fn log_binary_32(chunks: u8) -> Field {
-        let mut hashes: [Field; 8] = [0; 8];
+        let mut hashes: [Field; 5] = [0; 5];
         let mut chunks = chunks;
-        for i in 0..8 as u32 {
+        for i in 0..5 as u32 {
             if chunks % 2 == 1 {
-                hashes[i] = Counter::at(context.this_address()).log_balanced_binary_32(i as u8).call(&mut context)
+                hashes[i] = Counter::at(context.this_address())
+                    .log_balanced_binary_32(i as u8)
+                    .call(&mut context)
             }
             chunks /= 2;
         }
@@ -306,17 +331,18 @@ pub contract Counter {
 
     #[external("private")]
     fn log_binary_64(chunks: u8) -> Field {
-        let mut hashes: [Field; 8] = [0; 8];
+        let mut hashes: [Field; 5] = [0; 5];
         let mut chunks = chunks;
-        for i in 0..8 as u32 {
+        for i in 0..5 as u32 {
             if chunks % 2 == 1 {
-                hashes[i] = Counter::at(context.this_address()).log_balanced_binary_64(i as u8).call(&mut context)
+                hashes[i] = Counter::at(context.this_address())
+                    .log_balanced_binary_64(i as u8)
+                    .call(&mut context)
             }
             chunks /= 2;
         }
         poseidon::poseidon2::Poseidon2::hash(hashes, 8)
     }
-
 
     #[external("private")]
     fn log_binary_16_2() {
